@@ -16,9 +16,10 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
   if (err) throw err;
   display(); 
-
   
 });
+
+
 
 function display(){ //show items and price and display response one  time
 	var query = "SELECT * FROM products";
@@ -72,20 +73,17 @@ function runSearch(res) {
 		                runSearch(res);
 		        		}
 		        		else{
+
 		                 console.log("Your order was complete. Your cost: "+ (res[i].price*units));
 	                        var b =(res[i].stock_quantity- units);
+	                        var c= res[i].price*units;
 	                        var query = connection.query(
-		    					"UPDATE products SET ? WHERE ?",
-		    					[
-							      {
-							        stock_quantity: b
-							      },
-							      {
-							        id: id
-							      }
-							    ],
+		    					"UPDATE products SET stock_quantity= ?, product_sales = ? WHERE id=?",
+		    					[b, c, id],
+							   
 							    function(err, res) {
 							      if (err) throw err;
+							       console.log("Product Updated ");
 							        inquirer.prompt([
 								      {
 								          type: "confirm",
